@@ -1,0 +1,1 @@
+view.move.query.1.inc
