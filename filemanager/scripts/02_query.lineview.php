@@ -88,10 +88,10 @@
 			if ((inputNumCount == 0) ||
 					((inputNumCount == <?php echo (floor(log10($itemTotal)) + 1);?>) &amp;&amp;
 					((curNumVal &lt; 1) || (curNumVal &gt; itemCount)))) {
-				str = "[上下] ±1; [左右] ±<?php echo $itemPerPage; ?>; [上頁][下頁]最前後; [數字鍵直選]; {" + userInput + "}";
+				str = "[上下] ±1; [左右] ±<?php echo $itemPerPage; ?>; [上下]; [上頁][下頁]最前後; [紅]更新內容/重覆執行; [數字鍵直選]; {" + userInput + "}";
 			}
 			else {
-				str = "[上下] ±1; [左右] ±<?php echo $itemPerPage; ?>; [上頁][下頁]最前後; 第 " + curNumVal + " 項; {" + userInput + "}";
+				str = "[上下] ±1; [左右] ±<?php echo $itemPerPage; ?>; [上下]; [上頁][下頁]最前後; [紅]更新內容/重覆執行; 第 " + curNumVal + " 項; {" + userInput + "}";
 			}
 			print(str);
 			str;
@@ -187,6 +187,7 @@
 			userInput = currentUserInput();
 
 			if (
+				(userInput == "option_red") ||
 				(userInput == "pagedown") ||
 				(userInput == "pageup") ||
 				(userInput == "right") ||
@@ -203,7 +204,13 @@
 				(userInput == "zero")
 			) {
 				idx = Integer(getFocusItemIndex());
-				if (userInput == "pagedown") {
+				if (userInput == "option_red") {
+					/* [紅]更新內容/重覆執行; */
+					jumpToLink("refreshItem");
+					redrawDisplay();
+					ret = "true";
+				}
+				else if (userInput == "pagedown") {
 					idx = itemCount-1;
 				}
 				else if (userInput == "pageup") {
@@ -351,6 +358,16 @@
 <?php } ?>
 
 </channel>
+
+<?php
+	// refresh
+	$params  = str_replace('&', '&amp;', $_SERVER['QUERY_STRING']);
+	$currUrl = $scriptsURLprefix . '/' . $myName . '.php?' . $params;
+	echo "<refreshItem>\r\n";
+	echo "\t<link>$currUrl</link>\r\n";
+	echo "</refreshItem>\r\n";
+?>
+
 </rss>
 <?php
 	require('00_suffix.php');
