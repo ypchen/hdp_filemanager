@@ -62,7 +62,7 @@
 	</text>
 
 	<text redraw="yes" fontSize="20"
-		offsetXPC="85" offsetYPC="12"
+		offsetXPC="82" offsetYPC="12"
 		widthPC="20" heightPC="6"
 		backgroundColor="150:10:105" foregroundColor="255:255:255">
 		<script>sprintf("%s / ", focus-(-1))+itemCount;</script>
@@ -78,7 +78,7 @@
 		</script>
 	</image>
 
-	<text redraw="no" align="center"
+	<text redraw="no" align="left"
 		fontSize="<?php echo $fontSizeHint; ?>" lines="1"
 		offsetXPC="0" offsetYPC="<?php echo ($itemYPC+($rowCount*$itemHeightPC)+$statusAdjYPC); ?>"
 		widthPC="100" heightPC="<?php echo ($itemHeightPC+$statusAdjHeightPC); ?>"
@@ -88,10 +88,10 @@
 			if ((inputNumCount == 0) ||
 					((inputNumCount == <?php echo (floor(log10($itemTotal)) + 1);?>) &amp;&amp;
 					((curNumVal &lt; 1) || (curNumVal &gt; itemCount)))) {
-				str = "[上下] ±1; [左右] ±<?php echo $itemPerPage; ?>; [上下]; [上頁][下頁]最前後; [紅]更新內容/重覆執行; [數字鍵直選]; {" + userInput + "}";
+				str = "[上下]±1; [左右]±<?php echo $itemPerPage; ?>; [上下頁]最前後; [紅]更新內容/重覆執行; [數字鍵直選]; {" + userInput + "}";
 			}
 			else {
-				str = "[上下] ±1; [左右] ±<?php echo $itemPerPage; ?>; [上下]; [上頁][下頁]最前後; [紅]更新內容/重覆執行; 第 " + curNumVal + " 項; {" + userInput + "}";
+				str = "[上下]±1; [左右]±<?php echo $itemPerPage; ?>; [上下頁]最前後; [紅]更新內容/重覆執行; 第 " + curNumVal + " 項; {" + userInput + "}";
 			}
 			print(str);
 			str;
@@ -141,18 +141,29 @@
 					}
 				}
 
-				if (idx &lt; 9) {
-					"000" + Add(idx, 1) + ":　" + getItemInfo(idx, "title");
+				/* Because there seems no loop construct... */
+				strItemTitle = "" + Add(idx, 1) + ":　" + getItemInfo(idx, "title");
+				maxDigits    = <?php echo (floor(log10($itemTotal)) + 1); ?>;
+				numBoundary  = 9;
+				if ((maxDigits &gt; 1) &amp;&amp; (idx &lt; numBoundary)) {
+					strItemTitle = "0" + strItemTitle;
 				}
-				else if (idx &lt; 99) {
-					"00" + Add(idx, 1) + ":　" + getItemInfo(idx, "title");
+				maxDigits -= 1;
+				numBoundary = (10 * numBoundary) + 9;
+				if ((maxDigits &gt; 1) &amp;&amp; (idx &lt; numBoundary)) {
+					strItemTitle = "0" + strItemTitle;
 				}
-				else if (idx &lt; 999) {
-					"0" + Add(idx, 1) + ":　" + getItemInfo(idx, "title");
+				maxDigits -= 1;
+				numBoundary = (10 * numBoundary) + 9;
+				if ((maxDigits &gt; 1) &amp;&amp; (idx &lt; numBoundary)) {
+					strItemTitle = "0" + strItemTitle;
 				}
-				else {
-					"" + Add(idx, 1) + ":　" + getItemInfo(idx, "title");
+				maxDigits -= 1;
+				numBoundary = (10 * numBoundary) + 9;
+				if ((maxDigits &gt; 1) &amp;&amp; (idx &lt; numBoundary)) {
+					strItemTitle = "0" + strItemTitle;
 				}
+				strItemTitle;
 			</script>
 			<fontSize>
 				<script>
@@ -266,6 +277,12 @@
 					}
 
 					if ((curNumVal &gt;= 1) &amp;&amp; (curNumVal &lt;= itemCount)) {
+						idx = (curNumVal - 1);
+					}
+					else if ((inputNumVal &gt;= 1) &amp;&amp; (inputNumVal &lt;= itemCount)) {
+						/* Keep the last digit which makes the value out of range unless invalid */
+						inputNumCount = 1;
+						curNumVal = inputNumVal;
 						idx = (curNumVal - 1);
 					}
 					else {
