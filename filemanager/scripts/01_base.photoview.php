@@ -111,7 +111,7 @@
 	</text>
 
 	<text redraw="yes" fontSize="20"
-		offsetXPC="85" offsetYPC="12"
+		offsetXPC="82" offsetYPC="12"
 		widthPC="20" heightPC="6"
 		backgroundColor="10:105:150" foregroundColor="255:255:255">
 		<script>sprintf("%s / <?php echo $itemTotal; ?>", 1+focus);</script>
@@ -128,7 +128,7 @@
 		</script>
 	</image>
 
-	<text redraw="yes" align="center"
+	<text redraw="yes" align="left"
 		fontSize="<?php echo $fontSizeHint; ?>" lines="1"
 		offsetXPC="0" offsetYPC="<?php echo ($itemYPC+($rowCount*$itemHeightPC)+$statusAdjYPC); ?>"
 		widthPC="100" heightPC="<?php echo ($itemHeightPC+$statusAdjHeightPC); ?>"
@@ -139,23 +139,23 @@
 					((inputNumCount == <?php echo (floor(log10($itemTotal)) + 1);?>) &amp;&amp;
 					((curNumVal &lt; 1) || (curNumVal &gt; itemCount)))) {
 				if (functionSet == 0)
-					str = "[上下左右]; [上頁][下頁]最前後; [確定]檢視; [放大]進目錄; [紅]更新; [綠]複製; [黃]指定複製目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
+					str = "[方向鍵]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]更新; [綠]複製; [黃]指定複製目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
 				else if (functionSet == 1)
-					str = "[上下左右]; [上頁][下頁]最前後; [確定]檢視; [放大]進目錄; [紅]執行; [綠]移動; [黃]指定移動目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
+					str = "[方向鍵]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]執行; [綠]移動; [黃]指定移動目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
 				else if (functionSet == 2)
-					str = "[上下左右]; [上頁][下頁]最前後; [確定]檢視; [放大]進目錄; [紅]刪除; [綠]改名; [黃]創建新的目錄; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
+					str = "[方向鍵]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]刪除; [綠]改名; [黃]創建新的目錄; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
 				else
-					str = "[上下左右]; [上頁][下頁]最前後; [確定]檢視; [放大]進目錄; [紅]到 usbmounts; [綠]到複製目的; [黃]到移動目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
+					str = "[方向鍵]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]到 usbmounts; [綠]到複製目的; [黃]到移動目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
 			}
 			else {
 				if (functionSet == 0)
-					str = "[上下左右]; [上頁][下頁]最前後; [確定]檢視; [放大]進目錄; [紅]更新; [綠]複製; [黃]指定複製目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
+					str = "[方向鍵]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]更新; [綠]複製; [黃]指定複製目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
 				else if (functionSet == 1)
-					str = "[上下左右]; [上頁][下頁]最前後; [確定]檢視; [放大]進目錄; [紅]執行; [綠]移動; [黃]指定移動目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
+					str = "[方向鍵]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]執行; [綠]移動; [黃]指定移動目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
 				else if (functionSet == 2)
-					str = "[上下左右]; [上頁][下頁]最前後; [確定]檢視; [放大]進目錄; [紅]刪除; [綠]改名; [黃]創建新的目錄; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
+					str = "[方向鍵]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]刪除; [綠]改名; [黃]創建新的目錄; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
 				else
-					str = "[上下左右]; [上頁][下頁]最前後; [確定]檢視; [放大]進目錄; [紅]到 usbmounts; [綠]到複製目的; [黃]到移動目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
+					str = "[方向鍵]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]到 usbmounts; [綠]到複製目的; [黃]到移動目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
 			}
 			print(str);
 			str;
@@ -186,7 +186,7 @@
 		widthPC="100" heightPC="4"
 		backgroundColor="10:105:150" foregroundColor="255:255:255">
 		<script>
-			"目前所在位置: [" + currDir + "]{" + filterRegExp + "}; 複製目的位置: [" + copyDest + "]; 移動目的位置: [" + moveDest + "]";
+			"目前位置: [" + currDir + "]{" + filterRegExp + "}; 複製目的: [" + copyDest + "]; 移動目的: [" + moveDest + "]";
 		</script>
 	</text>
 
@@ -219,18 +219,29 @@
 					}
 				}
 
-				if (idx &lt; 9) {
-					"000" + Add(idx, 1) + ":　" + getItemInfo(idx, "title");
+				/* Because there seems no loop construct... */
+				strItemTitle = "" + Add(idx, 1) + ":　" + getItemInfo(idx, "title");
+				maxDigits    = <?php echo (floor(log10($itemTotal)) + 1); ?>;
+				numBoundary  = 9;
+				if ((maxDigits &gt; 1) &amp;&amp; (idx &lt; numBoundary)) {
+					strItemTitle = "0" + strItemTitle;
 				}
-				else if (idx &lt; 99) {
-					"00" + Add(idx, 1) + ":　" + getItemInfo(idx, "title");
+				maxDigits -= 1;
+				numBoundary = (10 * numBoundary) + 9;
+				if ((maxDigits &gt; 1) &amp;&amp; (idx &lt; numBoundary)) {
+					strItemTitle = "0" + strItemTitle;
 				}
-				else if (idx &lt; 999) {
-					"0" + Add(idx, 1) + ":　" + getItemInfo(idx, "title");
+				maxDigits -= 1;
+				numBoundary = (10 * numBoundary) + 9;
+				if ((maxDigits &gt; 1) &amp;&amp; (idx &lt; numBoundary)) {
+					strItemTitle = "0" + strItemTitle;
 				}
-				else {
-					"" + Add(idx, 1) + ":　" + getItemInfo(idx, "title");
+				maxDigits -= 1;
+				numBoundary = (10 * numBoundary) + 9;
+				if ((maxDigits &gt; 1) &amp;&amp; (idx &lt; numBoundary)) {
+					strItemTitle = "0" + strItemTitle;
 				}
+				strItemTitle;
 			</script>
 			<fontSize>
 				<script>
@@ -449,6 +460,12 @@
 					}
 
 					if ((curNumVal &gt;= 1) &amp;&amp; (curNumVal &lt;= itemCount)) {
+						idx = (curNumVal - 1);
+					}
+					else if ((inputNumVal &gt;= 1) &amp;&amp; (inputNumVal &lt;= itemCount)) {
+						/* Keep the last digit which makes the value out of range unless invalid */
+						inputNumCount = 1;
+						curNumVal = inputNumVal;
 						idx = (curNumVal - 1);
 					}
 					else {
