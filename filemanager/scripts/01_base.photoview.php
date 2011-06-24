@@ -10,7 +10,6 @@
 <?php include($myName . '.1.inc'); ?>
 
 <onEnter>
-	startitem = "middle";
 	setRefreshTime(1);
 
 	filterRegExp = "<?php echo $extra; ?>";
@@ -219,27 +218,15 @@
 					}
 				}
 
-				/* Because there seems no loop construct... */
 				strItemTitle = "" + Add(idx, 1) + ":　" + getItemInfo(idx, "title");
 				maxDigits    = <?php echo (floor(log10($itemTotal)) + 1); ?>;
 				numBoundary  = 9;
-				if ((maxDigits &gt; 1) &amp;&amp; (idx &lt; numBoundary)) {
-					strItemTitle = "0" + strItemTitle;
-				}
-				maxDigits -= 1;
-				numBoundary = (10 * numBoundary) + 9;
-				if ((maxDigits &gt; 1) &amp;&amp; (idx &lt; numBoundary)) {
-					strItemTitle = "0" + strItemTitle;
-				}
-				maxDigits -= 1;
-				numBoundary = (10 * numBoundary) + 9;
-				if ((maxDigits &gt; 1) &amp;&amp; (idx &lt; numBoundary)) {
-					strItemTitle = "0" + strItemTitle;
-				}
-				maxDigits -= 1;
-				numBoundary = (10 * numBoundary) + 9;
-				if ((maxDigits &gt; 1) &amp;&amp; (idx &lt; numBoundary)) {
-					strItemTitle = "0" + strItemTitle;
+				while (maxDigits &gt; 1) {
+					if (idx &lt; numBoundary) {
+						strItemTitle = "0" + strItemTitle;
+					}
+					maxDigits -= 1;
+					numBoundary = (10 * numBoundary) + 9;
 				}
 				strItemTitle;
 			</script>
