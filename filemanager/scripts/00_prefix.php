@@ -1,16 +1,21 @@
 <?php
 //	error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 
-	require('../../common/strings.php');
+	require('../../common/constants.php');
 	require('../../common/utilities.php');
 
-	$userAgent         = $userAgentFF3;
+	$userAgent        = $userAgentFF3;
 
-	$imsDirectory      = 'filemanager';
+	$wholeURL         = wholeURLforTheExecutedFile();
+	$rawPrefixURL     = strrleft($wholeURL, '/scripts');
+	$imsDirectory     = strrright($rawPrefixURL, '/');
+	$scriptsURLprefix = $rawPrefixURL . '/scripts';
+	$imagePrefix      = $rawPrefixURL . '/image/';
 
-	$scriptsURLprefix  = 'http://localhost:7711/' . $imsDirectory . '/scripts';
-	$imagePrefix       = 'http://localhost:7711/' . $imsDirectory . '/image/';
-	$idleImagePrefix   = 'busy';
+	$myScriptName     = $_SERVER['SCRIPT_NAME'];
+	$remoteIP         = $_SERVER['REMOTE_ADDR'];
+
+	$idleImagePrefix  = 'busy';
 
 	// Default main image width and height
 	$myImgWidth        = 35;
@@ -31,21 +36,5 @@
 	$fontSizeHint      = 16;
 	$fontSizeStatus    = 22;
 
-	$myScriptName      = $_SERVER['SCRIPT_NAME'];
-	$remoteIP          = $_SERVER['REMOTE_ADDR'];
-
 	$user_id           = 0;
-?>
-<?php
-	function myImage($site){
-		global $imagePrefix;
-
-		$siteComponents = explode('.', $site);
-		return ($imagePrefix . '' . $siteComponents[0] . '.jpg');
-	}
-
-	function myLogo($site){
-		return ('<image>' . myImage($site) . '</image>' .
-			'<media:thumbnail url="' . myImage($site) .'" />');
-	}
 ?>
