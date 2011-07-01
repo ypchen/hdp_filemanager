@@ -8,10 +8,6 @@
 	$statusAdjYPC      = -0.7;
 	$statusAdjHeightPC = 0.4;
 
-	$fontSizeText      = 12;
-	$fontSizeHint      = 12;
-	$fontSizeStatus    = 12;
-
 	$statusLines       = 2;
 	$statusAlign       = 'left';
 
@@ -20,7 +16,7 @@
 	$link  = $search;
 
 	chdir(dirname($link));
-	$command = 'mv -f "' . $link . '" "' . $extra . '" 2>&1';
+	$command = $commandNice . 'mv -f "' . $link . '" "' . $extra . '" 2>&1';
 	$shell_output = runExternal($command, $code, dirname($link));
 	$lines = explode("\n",
 				"Execute command: [$command]\n" .
