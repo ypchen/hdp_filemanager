@@ -4,16 +4,33 @@
 ?>
 <?php
 	require('00_prefix.php');
-	$myBaseName = basename($myScriptName, '.php');
 	$myName = basename($myScriptName, '.php');
+	$myBaseName = $myName;
 ?>
-<?php include($myName . '.1.inc'); ?>
+<?php
+	include($myName . '.1.inc');
+
+	// Default display parameters
+	if (!isset($themeMainForegroundColor)) $themeMainForegroundColor = '255:255:255';
+	if (!isset($themeMainBackgroundColor)) $themeMainBackgroundColor = '10:105:150';
+	if (!isset($themeTextForegroundColor)) $themeTextForegroundColor = '255:255:255';
+	if (!isset($themeTextBackgroundColor)) $themeTextBackgroundColor = '0:0:0';
+	if (!isset($themeTipsForegroundColor)) $themeTipsForegroundColor = '255:255:0';
+	if (!isset($themeTipsBackgroundColor)) $themeTipsBackgroundColor = $themeTextBackgroundColor;
+	if (!isset($themeItemForegroundColorFocused)) $themeItemForegroundColorFocused = $themeTextForegroundColor;
+	if (!isset($themeItemBackgroundColorFocused)) $themeItemBackgroundColorFocused = $themeMainBackgroundColor;
+	if (!isset($themeItemForegroundColorUnfocused)) $themeItemForegroundColorUnfocused = '140:140:140';
+	if (!isset($themeItemBackgroundColorUnfocused)) $themeItemBackgroundColorUnfocused = $themeTextBackgroundColor;
+	if (!isset($themeItemFontSizeFocused)) $themeItemFontSizeFocused = '12';
+	if (!isset($themeItemFontSizeUnfocused)) $themeItemFontSizeUnfocused = $themeItemFontSizeFocused;
+	if (!isset($themeTipsFontSize)) $themeTipsFontSize = '12';
+
+	// Create my own link
+	$params  = str_replace('&', '&amp;', $_SERVER['QUERY_STRING']);
+	$currUrl = $scriptsURLprefix . '/' . $myName . '.php?' . $params;
+?>
 
 <onEnter>
-	setRefreshTime(1);
-
-	filterRegExp = "<?php echo $extra; ?>";
-
 	functionSet = 0;
 	/* [紅]更新; [綠]複製; [黃]指定複製目的; [藍]切換功能; */
 	/* functionSet = 1; */
@@ -23,6 +40,9 @@
 	/* functionSet = 3; */
 	/* [紅]到 usbmounts; [綠]到複製目的; [黃]到移動目的;  [藍]切換功能; */
 
+	filterRegExp = "<?php echo $extra; ?>";
+
+	focus = 0;
 	userInput = "";
 	specialMsg = "";
 
@@ -71,11 +91,23 @@
 		renameDest = "NEW";
 	}
 	writeStringToFile(fileRenameDest, renameDest);
+
+	/* Static items */
+	itemCount = getPageInfo("itemCount");
+	setRefreshTime(200);
+
+	x = itemCount;
+	<?php include('00_utils.digits.inc'); ?>
+	itemCountDigits = y;
 </onEnter>
 
 <onRefresh>
 	setRefreshTime(-1);
 	itemCount = getPageInfo("itemCount");
+	x = itemCount;
+	<?php include('00_utils.digits.inc'); ?>
+	itemCountDigits = y;
+	redrawDisplay();
 </onRefresh>
 
 <mediaDisplay name="photoView"
@@ -92,7 +124,7 @@
 	itemGapXPC="0"
 	itemGapYPC="0"
 	showHeader="no"
-	centerXPC="5"
+	centerXPC="<?php echo $itemXPC; ?>"
 	centerYPC="<?php echo $itemYPC; ?>"
 	centerWidthPC="100"
 	centerHeightPC="100"
@@ -102,77 +134,81 @@
 	backgroundColor="0:0:0"
 	itemBorderColor="200:200:0"
 >
-
-	<text align="center" fontSize="26"
-		offsetXPC="0" offsetYPC="0" widthPC="100" heightPC="20"
-		backgroundColor="10:105:150" foregroundColor="255:255:255">
-		<script>getPageInfo("pageTitle");</script>
-	</text>
-
-	<text redraw="yes" fontSize="20"
-		offsetXPC="82" offsetYPC="12"
-		widthPC="20" heightPC="6"
-		backgroundColor="10:105:150" foregroundColor="255:255:255">
-		<script>sprintf("%s / <?php echo $itemTotal; ?>", 1+focus);</script>
-	</text>
-		<!--<script>sprintf("%s / ", focus-(-1))+itemCount;</script>-->
-
 	<image redraw="no"
 		offsetXPC="5" offsetYPC="2.5"
 		widthPC="15" heightPC="15"
 		backgroundColor="-1:-1:-1">
 		<script>
-			print(imgLeftTop);
 			imgLeftTop;
 		</script>
 	</image>
 
+	<text align="center" fontSize="26"
+		offsetXPC="0" offsetYPC="0" widthPC="100" heightPC="20"
+		backgroundColor="<?php echo $themeMainBackgroundColor; ?>"
+		foregroundColor="<?php echo $themeMainForegroundColor; ?>">
+		<script>
+			getPageInfo("pageTitle");
+		</script>
+	</text>
+
+	<text redraw="yes" fontSize="20"
+		offsetXPC="82" offsetYPC="12"
+		widthPC="20" heightPC="6"
+		backgroundColor="<?php echo $themeMainBackgroundColor; ?>"
+		foregroundColor="<?php echo $themeMainForegroundColor; ?>">
+		<script>
+			"" + Add(focus, 1) + " / " + itemCount;
+		</script>
+	</text>
+
 	<text redraw="yes" align="left"
-		fontSize="<?php echo $fontSizeHint; ?>" lines="1"
+		fontSize="<?php echo $themeTipsFontSize; ?>" lines="1"
 		offsetXPC="0" offsetYPC="<?php echo ($itemYPC+($rowCount*$itemHeightPC)+$statusAdjYPC); ?>"
 		widthPC="100" heightPC="<?php echo ($itemHeightPC+$statusAdjHeightPC); ?>"
-		backgroundColor="0:0:0" foregroundColor="255:255:0">
+		backgroundColor="<?php echo $themeTipsBackgroundColor; ?>"
+		foregroundColor="<?php echo $themeTipsForegroundColor; ?>">
 		<script>
 			userInput = currentUserInput();
 			if ((inputNumCount == 0) ||
-					((inputNumCount == <?php echo (floor(log10($itemTotal)) + 1);?>) &amp;&amp;
+					((inputNumCount == itemCountDigits) &amp;&amp;
 					((curNumVal &lt; 1) || (curNumVal &gt; itemCount)))) {
 				if (functionSet == 0)
-					str = "[方向鍵]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]更新; [綠]複製; [黃]指定複製目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
+					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]更新; [綠]複製; [黃]指定複製目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
 				else if (functionSet == 1)
-					str = "[方向鍵]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]執行; [綠]移動; [黃]指定移動目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
+					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]執行; [綠]移動; [黃]指定移動目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
 				else if (functionSet == 2)
-					str = "[方向鍵]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]刪除; [綠]改名; [黃]創建新的目錄; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
+					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]刪除; [綠]改名; [黃]創建新的目錄; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
 				else
-					str = "[方向鍵]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]到 usbmounts; [綠]到複製目的; [黃]到移動目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
+					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]到 usbmounts; [綠]到複製目的; [黃]到移動目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
 			}
 			else {
 				if (functionSet == 0)
-					str = "[方向鍵]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]更新; [綠]複製; [黃]指定複製目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
+					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]更新; [綠]複製; [黃]指定複製目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
 				else if (functionSet == 1)
-					str = "[方向鍵]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]執行; [綠]移動; [黃]指定移動目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
+					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]執行; [綠]移動; [黃]指定移動目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
 				else if (functionSet == 2)
-					str = "[方向鍵]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]刪除; [綠]改名; [黃]創建新的目錄; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
+					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]刪除; [綠]改名; [黃]創建新的目錄; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
 				else
-					str = "[方向鍵]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]到 usbmounts; [綠]到複製目的; [黃]到移動目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
+					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]到 usbmounts; [綠]到複製目的; [黃]到移動目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
 			}
-			print(str);
 			str;
 		</script>
 	</text>
 
 	<text redraw="yes" align="<?php echo $statusAlign; ?>" lines="<?php echo $statusLines; ?>"
-		fontSize="<?php echo $fontSizeStatus; ?>"
+		fontSize="<?php echo $themeTipsFontSize; ?>"
 		offsetXPC="0" offsetYPC="90"
 		widthPC="100" heightPC="4"
-		backgroundColor="10:105:150" foregroundColor="255:255:255">
+		backgroundColor="<?php echo $themeMainBackgroundColor; ?>"
+		foregroundColor="<?php echo $themeMainForegroundColor; ?>">
 		<script>
 			"完整徑名資料: " + fullnameData + specialMsg;
 		</script>
 		<foregroundColor>
 			<script>
 				if (specialMsg == "")
-					"255:255:255";
+					"<?php echo $themeMainForegroundColor; ?>";
 				else
 					"255:0:0";
 			</script>
@@ -180,10 +216,11 @@
 	</text>
 
 	<text redraw="yes" align="<?php echo $statusAlign; ?>" lines="<?php echo $statusLines; ?>"
-		fontSize="<?php echo $fontSizeStatus; ?>"
+		fontSize="<?php echo $themeTipsFontSize; ?>"
 		offsetXPC="0" offsetYPC="94"
 		widthPC="100" heightPC="4"
-		backgroundColor="10:105:150" foregroundColor="255:255:255">
+		backgroundColor="<?php echo $themeMainBackgroundColor; ?>"
+		foregroundColor="<?php echo $themeMainForegroundColor; ?>">
 		<script>
 			"目前位置: [" + currDir + "]{" + filterRegExp + "}; 複製目的: [" + copyDest + "]; 移動目的: [" + moveDest + "]";
 		</script>
@@ -219,14 +256,15 @@
 				}
 
 				strItemTitle = "" + Add(idx, 1) + ":　" + getItemInfo(idx, "title");
-				maxDigits    = <?php echo (floor(log10($itemTotal)) + 1); ?>;
 				numBoundary  = 9;
+				maxDigits    = itemCountDigits;
+				if (maxDigits &lt; 2) maxDigits = 2;
 				while (maxDigits &gt; 1) {
 					if (idx &lt; numBoundary) {
 						strItemTitle = "0" + strItemTitle;
 					}
-					maxDigits -= 1;
 					numBoundary = (10 * numBoundary) + 9;
+					maxDigits -= 1;
 				}
 				strItemTitle;
 			</script>
@@ -234,34 +272,34 @@
 				<script>
 					idx = getQueryItemIndex();
 					focus = getFocusItemIndex();
-					if(focus == idx) "<?php echo $fontSizeText; ?>";
-					else "<?php echo $fontSizeText; ?>";
+					if(focus == idx) "<?php echo $themeItemFontSizeFocused; ?>";
+					else "<?php echo $themeItemFontSizeUnfocused; ?>";
 				</script>
 			</fontSize>
-			<backgroundColor>
-				<script>
-					idx = getQueryItemIndex();
-					focus = getFocusItemIndex();
-					if(focus == idx) "10:105:150";
-					else "0:0:0";
-				</script>
-			</backgroundColor>
 			<foregroundColor>
 				<script>
 					idx = getQueryItemIndex();
 					focus = getFocusItemIndex();
-					if(focus == idx) "255:255:255";
-					else "140:140:140";
+					if(focus == idx) "<?php echo $themeItemForegroundColorFocused; ?>";
+					else "<?php echo $themeItemForegroundColorUnfocused; ?>";
 				</script>
 			</foregroundColor>
+			<backgroundColor>
+				<script>
+					idx = getQueryItemIndex();
+					focus = getFocusItemIndex();
+					if(focus == idx) "<?php echo $themeItemBackgroundColorFocused; ?>";
+					else "<?php echo $themeItemBackgroundColorUnfocused; ?>";
+				</script>
+			</backgroundColor>
 		</text>
 	</itemDisplay>
 
 	<onUserInput>
 		<script>
 			ret = "false";
-			userInput  = currentUserInput();
 			specialMsg = "";
+			userInput  = currentUserInput();
 
 			if (
 				(userInput == "zoom") ||
@@ -304,7 +342,7 @@
 							jumpToLink("runItem");
 						}
 						else {
-							specialMsg = " --- 無效的指令: 執行";
+							specialMsg = " -- 無效的指令: 執行";
 						}
 					}
 					else if (functionSet == 2) {
@@ -312,7 +350,7 @@
 							jumpToLink("deleteItem");
 						}
 						else {
-							specialMsg = " --- 無效的指令: 刪除";
+							specialMsg = " -- 無效的指令: 刪除";
 						}
 					}
 					else {
@@ -331,7 +369,7 @@
 							jumpToLink("copyItem");
 						}
 						else {
-							specialMsg = " --- 無效的指令: 複製";
+							specialMsg = " -- 無效的指令: 複製";
 						}
 					}
 					else if (functionSet == 1) {
@@ -339,7 +377,7 @@
 							jumpToLink("moveItem");
 						}
 						else {
-							specialMsg = " --- 無效的指令: 移動";
+							specialMsg = " -- 無效的指令: 移動";
 						}
 					}
 					else if (functionSet == 2) {
@@ -351,7 +389,7 @@
 							}
 						}
 						else {
-							specialMsg = " --- 無效的指令: 改名";
+							specialMsg = " -- 無效的指令: 改名";
 						}
 					}
 					else {
@@ -437,7 +475,7 @@
 						inputNumVal = 0;
 					}
 
-					if ((inputNumCount == 0) || (inputNumCount == <?php echo (floor(log10($itemTotal)) + 1);?>)) {
+					if ((inputNumCount == 0) || (inputNumCount == itemCountDigits)) {
 						inputNumCount = 1;
 						curNumVal = inputNumVal;
 					}

@@ -8,10 +8,6 @@
 	$statusAdjYPC      = -0.7;
 	$statusAdjHeightPC = 0.4;
 
-	$fontSizeText      = 12;
-	$fontSizeHint      = 12;
-	$fontSizeStatus    = 12;
-
 	$statusLines       = 2;
 	$statusAlign       = 'left';
 

@@ -4,7 +4,7 @@
 	function notification_email_text($subject, $body) {
 		global $imsUseEmail, $imsBotEmail, $imsAdminEmail;
 
-		if ($imsUseEmail) {
+		if (!empty($imsUseEmail)) {
 			$to = $imsAdminEmail;
 			$headers = "From: $imsBotEmail";
 			return mail($to, $subject, $body, $headers);
@@ -15,28 +15,35 @@
 	}
 
 	function yp_file_get_contents($url, $timeout = 30, $referer = '', $user_agent = ''){
-		$curl = curl_init();
-		if(strstr($referer, '://')) {
-			curl_setopt ($curl, CURLOPT_REFERER, $referer);
+		global $imsUseCurl;
+
+		if (!empty($imsUseCurl)) {
+			$curl = curl_init();
+			if(strstr($referer, '://')) {
+				curl_setopt ($curl, CURLOPT_REFERER, $referer);
+			}
+			curl_setopt ($curl, CURLOPT_URL, $url);
+			curl_setopt ($curl, CURLOPT_TIMEOUT, $timeout);
+			if (strlen($user_agent) == 0) {
+				$user_agent = ini_get('user_agent');
+			}
+			curl_setopt ($curl, CURLOPT_USERAGENT, $user_agent);
+			curl_setopt ($curl, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt ($curl, CURLOPT_SSL_VERIFYPEER, 0);
+			$html = curl_exec ($curl);
+			curl_close ($curl);
+			return $html;
 		}
-		curl_setopt ($curl, CURLOPT_URL, $url);
-		curl_setopt ($curl, CURLOPT_TIMEOUT, $timeout);
-		if (strlen($user_agent) == 0) {
-			$user_agent = ini_get('user_agent');
+		else {
+			return file_get_contents($url);
 		}
-		curl_setopt ($curl, CURLOPT_USERAGENT, $user_agent);
-		curl_setopt ($curl, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt ($curl, CURLOPT_SSL_VERIFYPEER, 0);
-		$html = curl_exec ($curl);
-		curl_close ($curl);
-		return $html;
 	}
 
 	function yp_log10($x) {
 		return (($x > 0) ? log10($x) : 0);
 	}
 
-	function yp_cmp_strings($a, $b) {
+	function yp_cmp_strings_length_first($a, $b) {
 		$aLen = strlen($a);
 		$bLen = strlen($b);
 
@@ -47,18 +54,6 @@
 			return (1);
 
 		return strcmp($a, $b);
-	}
-
-	function yp_cmp_videos($a, $b) {
-		// Compare their titles
-		return yp_cmp_strings($a[1], $b[1]);
-	}
-
-	function yp_cmp_videos_2($a, $b) {
-		// Compare their titles
-		$aexp = explode('/', $a[1]);
-		$bexp = explode('/', $b[1]);
-		return yp_cmp_strings(trim($aexp[0]), trim($bexp[0]));
 	}
 
 	// This function is obtained from
