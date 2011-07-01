@@ -2,9 +2,11 @@
 	此模組使用不甚將可能導致重要檔案被刪除，若無把握請勿使用
 
 前提
-	1. 奠基於 iMax.Live韌體20110401
-	2. 使用 hdp_input 做為輸入模組，可由以下 git 取得
-		 https://github.com/ypchen/hdp_filemanager.git
+	1. 奠基於 iMax.Live韌體20110401 (執行 lighttpd + php)
+	2. 使用 hdp_input 做為輸入模組，可至
+			https://github.com/ypchen/hdp_input
+		下載，或使用 git 取得
+			https://github.com/ypchen/hdp_input.git
 
 功能
 	Filemanager (via php) for HiMedia HD300A/B (and possibly other models)
@@ -15,7 +17,7 @@
 	(也就是 /opt/share/www/common 和 /opt/share/www/filemanager)
 	即可在 menu.rss 或其他地方使用以下 url 來進行檔案管理
 
-		http://localhost:7711/filemanager/scripts/view.php?uid=0&amp;query=0,%2F,,
-	
-	1. 我的 httpd 的 port 是開在 7711，請自行修改成你的 port，還有 00-prefix.php 中也有設定
-	2. "%2F" 是 "/" 也就是根目錄
+		http://localhost/filemanager/scripts/view.php?uid=0&amp;query=0,%2F,,
+
+備註
+	1. "%2F" 是 "/" (亦即根目錄)
