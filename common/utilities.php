@@ -39,6 +39,10 @@
 		}
 	}
 
+	function local_file_get_contents($file) {
+		return file_get_contents($file);
+	}
+
 	function yp_log10($x) {
 		return (($x > 0) ? log10($x) : 0);
 	}
@@ -164,11 +168,22 @@
 	function myImage($imgName, $imgDir = ''){
 		global $imagePrefix;
 
+		// image file
 		$testExtensions = array('.jpg', '.png', '.gif');
 		foreach ($testExtensions as $ext) {
 			if (file_exists('../image/' . $imgDir . $imgName . $ext))
 				return ($imagePrefix . $imgDir . $imgName . $ext);
 		}
+
+		// image url
+		$testExtensions = array('.url', '.link');
+		foreach ($testExtensions as $ext) {
+			$txtFile = '../image/' . $imgDir . $imgName . $ext;
+			if (file_exists($txtFile)) {
+				return (trim(local_file_get_contents($txtFile)));
+			}
+		}
+
 		return ($imagePrefix . 'default.jpg');
 	}
 
