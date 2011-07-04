@@ -6,7 +6,7 @@
 	2. 使用 hdp_input 做為輸入模組，可至
 			https://github.com/ypchen/hdp_input
 		下載，或使用 git 取得
-			https://github.com/ypchen/hdp_input.git
+		git clone git://github.com/ypchen/hdp_input.git
 
 功能
 	Filemanager (via php) for HiMedia HD300A/B (and possibly other models)
@@ -16,7 +16,7 @@
 	由
 		https://github.com/ypchen/hdp_filemanager
 	下載，或使用 git 取得
-		https://github.com/ypchen/hdp_filemanager.git
+		git clone git://github.com/ypchen/hdp_filemanager.git
 
 使用
 	將 common 和 filemanager 放在 /opt/share/www 下
