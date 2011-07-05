@@ -1,11 +1,11 @@
 注意
-	此模組使用不甚將可能導致重要檔案被刪除，若無把握請勿使用
+	此模組若使用不慎極可能導致重要檔案被刪除，若無把握請勿使用
 
 前提
-	1. 奠基於 iMax.Live韌體20110401 (執行 lighttpd + php)
+	1. 奠基於 iMax.Live 韌體 20110401 (執行 lighttpd + php)
 	2. 使用 hdp_input 做為輸入模組，可至
 			https://github.com/ypchen/hdp_input
-		下載，或使用 git 取得
+		下載，或使用 git clone 取得
 		git clone git://github.com/ypchen/hdp_input.git
 
 功能
@@ -15,7 +15,7 @@
 取得
 	由
 		https://github.com/ypchen/hdp_filemanager
-	下載，或使用 git 取得
+	下載，或使用 git clone 取得
 		git clone git://github.com/ypchen/hdp_filemanager.git
 
 使用
