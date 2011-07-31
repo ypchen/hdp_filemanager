@@ -382,7 +382,7 @@
 					}
 					else if (functionSet == 2) {
 						if ((fileGoItem != ".") &amp;&amp; (fileGoItem != "..")) {
-							renameDest = doModalRss("rss_file://./etc/ypInput/ypKeyboard.rss", "mediaDisplay", "search", 0);
+							renameDest = doModalRss("rss_file://./etc/ypInput/keyboard.rss", "mediaDisplay", "search", 0);
 							writeStringToFile(fileRenameDest, renameDest);
 							if (renameDest != null) {
 								jumpToLink("renameItem");
@@ -412,7 +412,7 @@
 						writeStringToFile(fileMoveDest, moveDest);
 					}
 					else if (functionSet == 2) {
-						mkdirDest = doModalRss("rss_file://./etc/ypInput/ypKeyboard.rss", "mediaDisplay", "search", 0);
+						mkdirDest = doModalRss("rss_file://./etc/ypInput/keyboard.rss", "mediaDisplay", "search", 0);
 						writeStringToFile(fileMkdirDest, mkdirDest);
 						if (mkdirDest != null) {
 							jumpToLink("mkdirItem");
