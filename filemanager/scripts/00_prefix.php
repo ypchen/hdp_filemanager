@@ -43,4 +43,21 @@
 	// Set the nice value of the command to execute
 	// The final space ' ' is important to connect to the actual command
 	$commandNice       = '/bin/nice -n 15 ';
+
+	// Get the version info
+	if (!isset($imsVersion)) {
+		if (!isset($imsFullVersion)) {
+			if (file_exists($fileVersion = '../imsVersion')) {
+				$imsFullVersion = trim(file_get_contents($fileVersion));
+			}
+			else {
+				$imsFullVersion = ': : ';
+			}
+		}
+
+		$imsFullVersionComp = explode(': ', $imsFullVersion);
+		if (strlen($imsVersion = trim($imsFullVersionComp[0])) <= 0) {
+			$imsVersion = trim($imsFullVersionComp[2]);
+		}
+	}
 ?>
