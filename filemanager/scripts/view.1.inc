@@ -18,36 +18,40 @@
 	// Set the timezone
 	date_default_timezone_set('Asia/Taipei');
 
-	$videos = array();
-
 	if (strlen($search) == 0)
 		$dir = '/usr/bin';
 	else
 		$dir = $search;
 
+	$fileCount = 0;
+
 	if ($dh = opendir($dir)) {
+		// Change to use 'ls -a1' now (NOT ls -al)
+		// Creating an array needs too much memory
+		closedir($dh);
+
+		$link = "ls -a1 \"$dir\"";
+		$command = $commandNice . $link . ' 2>&1';
+		$shell_output = runExternal($command, $code);
+
+		$videos = explode("\n", $shell_output);
+
+		echo "<script>\r\n";
+		echo "\tfileArray     = null;\r\n";
+		echo "\tfullnameArray = null;\r\n";
 
 		if (strcmp($dir, '/') == 0) {
-			try {
-				$file = '.';
-				$fullname = '/';
-				$video = array(
-					$file,
-					$fullname,
-					date('Y-md H:i:s', filemtime($fullname)),
-					filesize($fullname),
-					fileperms($fullname),
-					filetype($fullname),
-					$dir,
-				);
-				$videos[] = $video;
-			}
-			catch (Exception $e) {
-				//echo 'Caught exception: ' . $e->getMessage() .
-			}
+			$fileCount ++;
+			$file = '.';
+			$fullname = '/';
+			echo "\tfileArray     = pushBackStringArray(fileArray, \"" . $file . "\");\r\n";
+			echo "\tfullnameArray = pushBackStringArray(fullnameArray, \"" . $fullname . "\");\r\n";
 		}
 
-		while (($file = readdir($dh)) !== false) {
+		foreach($videos as $video) {
+
+			$file = str_replace("\n", '', $video);
+
 			if (strcmp($file, '.') == 0)
 				continue;
 
@@ -68,43 +72,17 @@
 						$fullname = realpath($fullname);
 				}
 
-				try {
-					$video = array(
-						$file,
-						$fullname,
-						date('Y-md H:i:s', filemtime($fullname)),
-						filesize($fullname),
-						fileperms($fullname),
-						filetype($fullname),
-						$dir,
-					);
-					$videos[] = $video;
-				}
-				catch (Exception $e) {
-					//echo 'Caught exception: ' . $e->getMessage() .
-				}
+				$fileCount ++;
+				echo "\tfileArray     = pushBackStringArray(fileArray, \"" . $file . "\");\r\n";
+				echo "\tfullnameArray = pushBackStringArray(fullnameArray, \"" . $fullname . "\");\r\n";
 			}
 		}
-		closedir($dh);
+
+		echo "</script>\r\n";
 	}
 
-	usort($videos, "cmp_filename");
+	$itemTotal = $fileCount;
 
-	$itemTotal = count($videos);
 	//No need to check
 	//include('05_check.base.inc');
-
-	echo "<script>\r\n";
-	echo "\tfileArray     = null;\r\n";
-	echo "\tfullnameArray = null;\r\n";
-	foreach($videos as $video) {
-		echo "\tfileArray     = pushBackStringArray(fileArray, \"" . $video[0] . "\");\r\n";
-		echo "\tfullnameArray = pushBackStringArray(fullnameArray, \"" . $video[1] . "\");\r\n";
-	}
-	echo "</script>\r\n";
-?>
-<?php
-	function cmp_filename($a, $b) {
-		return (strcmp($a[0], $b[0]));
-	}
 ?>

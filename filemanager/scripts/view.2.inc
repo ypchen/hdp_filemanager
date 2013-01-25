@@ -7,17 +7,60 @@
 	unset($tagName);
 	unset($tagCount);
 
-	$siteURLprefix = '';
-	foreach($videos as $video) {
-		$title = $video[0];
-		$link  = $siteURLprefix . trim($video[1]);
-		$image = '';
-		$data  = ' [' . $video[5] . ' ' . sprintf('%04o', ($video[4] & 0x0FFF)) . " $video[3]] $video[2]";
-		//$extra contains the regular expression for filtering file names
-		//$extra = '';
+	if ($dh = opendir($dir)) {
+		// Change to use 'ls -a1' now (NOT ls -al)
+		// Creating an array needs too much memory
+		closedir($dh);
 
-		$note  = $video[6];
-		include('04_query.inc');
+		if (strcmp($dir, '/') == 0) {
+			$file = '.';
+			$fullname = '/';
+			$title = $file;
+			$link  = $fullname;
+			$image = '';
+			$data  = ' [' . filetype($fullname) . ' ' . sprintf('%04o', (fileperms($fullname) & 0x0FFF)) . ' ' . filesize($fullname) . '] ' . date('Y-md H:i:s', filemtime($fullname));
+			//$extra contains the regular expression for filtering file names
+			//$extra = '';
+
+			$note  = $dir;
+			include('04_query.inc');
+		}
+
+		foreach($videos as $video) {
+
+			$file = str_replace("\n", '', $video);
+
+			if (strcmp($file, '.') == 0)
+				continue;
+
+			if ((strcmp($file, '..') == 0) && (strcmp($dir, '/') == 0))
+				continue;
+
+			if (
+				(strcmp($file, '..') == 0) ||
+				!isset($extra) ||
+				(strlen($extra) == 0) ||
+				(preg_match($extra, $file) == 1)
+			) {
+				if (strcmp($dir, '/') == 0)
+					$fullname = $dir . $file;
+				else {
+					$fullname = $dir . '/' . $file;
+					if (strcmp($file, '..') == 0)
+						$fullname = realpath($fullname);
+				}
+
+				$title = $file;
+				$link  = $fullname;
+				$image = '';
+				$data  = ' [' . filetype($fullname) . ' ' . sprintf('%04o', (fileperms($fullname) & 0x0FFF)) . ' ' . filesize($fullname) . '] ' . date('Y-md H:i:s', filemtime($fullname));
+				//$extra contains the regular expression for filtering file names
+				//$extra = '';
+
+				$note  = $dir;
+				include('04_query.inc');
+			}
+		}
 	}
 ?>
 </channel>

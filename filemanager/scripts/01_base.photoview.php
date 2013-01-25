@@ -17,6 +17,8 @@
 	if (!isset($themeTextBackgroundColor)) $themeTextBackgroundColor = '0:0:0';
 	if (!isset($themeTipsForegroundColor)) $themeTipsForegroundColor = '255:255:0';
 	if (!isset($themeTipsBackgroundColor)) $themeTipsBackgroundColor = $themeTextBackgroundColor;
+	if (!isset($themeVersionForegroundColor)) $themeVersionForegroundColor = '0:140:140';
+	if (!isset($themeVersionBackgroundColor)) $themeVersionBackgroundColor = '-1:-1:-1';
 	if (!isset($themeItemForegroundColorFocused)) $themeItemForegroundColorFocused = $themeTextForegroundColor;
 	if (!isset($themeItemBackgroundColorFocused)) $themeItemBackgroundColorFocused = $themeMainBackgroundColor;
 	if (!isset($themeItemForegroundColorUnfocused)) $themeItemForegroundColorUnfocused = '140:140:140';
@@ -24,6 +26,7 @@
 	if (!isset($themeItemFontSizeFocused)) $themeItemFontSizeFocused = '12';
 	if (!isset($themeItemFontSizeUnfocused)) $themeItemFontSizeUnfocused = $themeItemFontSizeFocused;
 	if (!isset($themeTipsFontSize)) $themeTipsFontSize = '12';
+	if (!isset($themeVersionFontSize)) $themeVersionFontSize = '12';
 
 	// Create my own link
 	$params  = str_replace('&', '&amp;', $_SERVER['QUERY_STRING']);
@@ -174,25 +177,36 @@
 					((inputNumCount == itemCountDigits) &amp;&amp;
 					((curNumVal &lt; 1) || (curNumVal &gt; itemCount)))) {
 				if (functionSet == 0)
-					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]更新; [綠]複製; [黃]指定複製目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
+					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大/重覆]進目錄; [紅]更新; [綠]複製; [黃]指定複製目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
 				else if (functionSet == 1)
-					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]執行; [綠]移動; [黃]指定移動目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
+					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大/重覆]進目錄; [紅]執行; [綠]移動; [黃]指定移動目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
 				else if (functionSet == 2)
-					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]刪除; [綠]改名; [黃]創建新的目錄; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
+					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大/重覆]進目錄; [紅]刪除; [綠]改名; [黃]創建新的目錄; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
 				else
-					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]到 usbmounts; [綠]到複製目的; [黃]到移動目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
+					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大/重覆]進目錄; [紅]到 usbmounts; [綠]到複製目的; [黃]到移動目的; [藍]切換功能; [數字鍵直選]; {" + userInput + "}";
 			}
 			else {
 				if (functionSet == 0)
-					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]更新; [綠]複製; [黃]指定複製目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
+					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大/重覆]進目錄; [紅]更新; [綠]複製; [黃]指定複製目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
 				else if (functionSet == 1)
-					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]執行; [綠]移動; [黃]指定移動目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
+					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大/重覆]進目錄; [紅]執行; [綠]移動; [黃]指定移動目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
 				else if (functionSet == 2)
-					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]刪除; [綠]改名; [黃]創建新的目錄; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
+					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大/重覆]進目錄; [紅]刪除; [綠]改名; [黃]創建新的目錄; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
 				else
-					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大]進目錄; [紅]到 usbmounts; [綠]到複製目的; [黃]到移動目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
+					str = "[↕][↔]; [上下頁]最前後; [確定]檢視; [放大/重覆]進目錄; [紅]到 usbmounts; [綠]到複製目的; [黃]到移動目的; [藍]切換功能; 第 " + curNumVal + " 項; {" + userInput + "}";
 			}
 			str;
+		</script>
+	</text>
+
+	<text redraw="no" align="right"
+		fontSize="<?php echo $themeVersionFontSize; ?>" lines="1"
+		offsetXPC="88" offsetYPC="<?php echo ($itemYPC+($rowCount*$itemHeightPC)+$statusAdjYPC); ?>"
+		widthPC="9" heightPC="<?php echo ($itemHeightPC+$statusAdjHeightPC); ?>"
+		backgroundColor="<?php echo $themeVersionBackgroundColor; ?>"
+		foregroundColor="<?php echo $themeVersionForegroundColor; ?>">
+		<script>
+			"<?php echo $imsVersion; ?>";
 		</script>
 	</text>
 
@@ -302,7 +316,7 @@
 			userInput  = currentUserInput();
 
 			if (
-				(userInput == "zoom") ||
+				(userInput == "zoom") || (userInput == "video_repeat") || (userInput == "video_abrepeat") ||
 				(userInput == "option_red") ||
 				(userInput == "option_green") ||
 				(userInput == "option_yellow") ||
@@ -323,8 +337,8 @@
 				idx = Integer(getFocusItemIndex());
 				goItemIndex = idx;
 				fileGoItem  = getStringArrayAt(fileArray, goItemIndex);
-				if (userInput == "zoom") {
-					/* [放大]進目錄 */
+				if ((userInput == "zoom") || (userInput == "video_repeat") || (userInput == "video_abrepeat")) {
+					/* [放大/(AB)重覆]進目錄 */
 					jumpToLink("chdirItem");
 					redrawDisplay();
 					ret = "true";
