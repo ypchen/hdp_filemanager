@@ -45,9 +45,12 @@
 	$commandNice       = '/bin/nice -n 15 ';
 
 	// Get the version info
+	if (!isset($fileVersion)) {		
+		$fileVersion = '../../imsVersion';
+	}
 	if (!isset($imsVersion)) {
 		if (!isset($imsFullVersion)) {
-			if (file_exists($fileVersion = '../imsVersion')) {
+			if (file_exists($fileVersion)) {
 				$imsFullVersion = trim(file_get_contents($fileVersion));
 			}
 			else {
